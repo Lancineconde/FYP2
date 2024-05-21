@@ -1,0 +1,68 @@
+CREATE table receiveposts(
+    j_id int(11) AUTO_INCREMENT PRIMARY KEY not null,
+    j_email varchar(256) not null,
+    j_title varchar(256) not null,
+    j_location varchar(256) not null,
+    j_type varchar(256)not null,
+    j_description varchar(256) not null,
+    j_companyname varchar(256) not null,
+    j_companydescription varchar(256) not null,
+    j_website varchar(256) not null,
+    j_state varchar(256) not null,
+    j_zibcode varchar(256) not null
+    );
+
+
+
+    CREATE TABLE usersign(
+        u_id int(11) AUTO_INCREMENT PRIMARY KEY not null,
+        u_fname varchar(50) not null,
+        u_lname varchar(50) not null,
+        u_email varchar(50) not null,
+        u_uid varchar(50) not null,
+        u_pwd varchar(50) not null
+        );
+
+
+
+/**/
+
+<?php
+include_once "dbh.inc.php";
+
+
+
+if (isset($_POST['submit'])) {
+  $file =$_FILES['file'];
+
+  $fileName = $_FILES['file']['name'];
+  $fileTmpName = $_FILES['file']['tmpName'];
+  $fileSize = $_FILES['file']['size'];
+  $fileError = $_FILES['file']['error'];
+  $fileType = $_FILES['file']['type'];
+
+  $fileExt = explode('.', $fileName);
+  $fileActualExt = strtolower(end($fileExt));
+
+  $allowed =array('jpg', 'jpeg', 'png');
+
+  if (in_array($fileActualExt, $allowed)) {
+    if ($fileError === 0) {
+      if ($fileSize < 1000000) {
+        $fileNameNew = uniqid('', true).".".$fileActualExt;
+
+        $fileDestination = '_images/demo/uploads/'.$fileNameNew;
+        move_uploaded_file($fileTmpName, $fileDestination);
+      }else {
+        // code...
+        echo "Your file is too big!";
+      }
+    }else {
+      // code...
+      echo "There was an eror uploading the file!";
+    }
+    // code...
+  }else {
+    echo "You cannot upload files of this type!";
+  }
+}
